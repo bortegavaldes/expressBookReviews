@@ -74,11 +74,13 @@ public_users.get('/isbn/:isbn', async function (req, res) {
 public_users.get('/author/:author', async function (req, res) {
   try {
     const author = req.params.author;
-    const booksOfAuthor = await (async (authorStr) => { return Object.entries(books).filter(([key, book]) => { return book.author.includes(authorStr) }) })(author);
-    if (booksOfAuthor) {
-      return res.send(Object.fromEntries(booksOfAuthor));
+    const booksOfAuthor = await (async (authorStr) => 
+      { return Object.entries(books).filter(([key, book]) => { return book.author.includes(authorStr) }) 
+      })(author);
+    if (booksOfAuthor.length > 0) {
+      res.send(Object.fromEntries(booksOfAuthor));
     } else {
-      return res.status(404).send(`The provided ${author} is not found between author names`);
+      res.status(404).send(`The provided author ${author} is not found between author names`);
     }
   } catch (error) {
     res.status(500).send('Failed to get books by author');
@@ -89,11 +91,15 @@ public_users.get('/author/:author', async function (req, res) {
 public_users.get('/title/:title', async function (req, res) {
   try {
     const title = req.params.title;
-    const booksOfTitle = await (async (titleStr) => { return Object.entries(books).filter(([key, book]) => { return book.title.includes(titleStr) }) })(title);
-    if (booksOfTitle) {
-      return res.send(Object.fromEntries(booksOfTitle));
+    const booksOfTitle = await (async (titleStr) => { 
+      return Object.entries(books).filter(([key, book]) => { 
+        return book.title.includes(titleStr) 
+      }) 
+    })(title);
+    if (booksOfTitle.length > 0) {
+      res.send(Object.fromEntries(booksOfTitle));
     } else {
-      return res.status(404).send(`The provided ${title} is not found between book titles.`);
+      res.status(404).send(`The provided title ${title} is not found between book titles.`);
     }
   } catch (error) {
     res.status(500).send('Failed to get books by title');
